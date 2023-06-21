@@ -20,7 +20,7 @@ import axios from 'axios';
 const App = () => {
 
   const [tasks, setTasks] = useState([]);
-  const API = 'https://task-list-api-c17.onrender.com/';
+  const API = 'https://task-list-api-c17.onrender.com/tasks';
 
   useEffect(() => {
     axios
@@ -33,31 +33,43 @@ const App = () => {
       });
   }, []);
 
-  const updateTaskData = updatedTask => {
-    const newTasks = 
+  const updateTaskData = updatedTask => {     
       axios
-        .patch(`${API}/${task_id}/mark_incomplete`, {task: newTasks})
+        .patch(`${API}/${updatedTask.id}/mark_complete`)
         .then((result) => {
           console.log(result.data);
-          const
+          const newTasks = tasks.map(task => {
+            if (task.id === updatedTask.id) {
+              return updatedTask;
+            } else {
+              return task;
+            }
+          });
+      
+          setTasks(newTasks);
         })
-    
-    tasks.map(task => {
-      if (task.id === updatedTask.id) {
-        return updatedTask;
-      } else {
-        return task;
-      }
-    });
-
-    setTasks(newTasks);
-  };
+        .catch((error) => {
+          console.log(error);
+        });
+          
+      };
 
   const deleteTask = (id) => {
-    const newTasks = tasks.filter(
-      (task) => task.id !== id
-    );
-    setTasks(newTasks);
+    axios
+      .delete(`${API}/${id}`)
+      .then((result) => {
+        console.log(result.data)
+        const newTasks = [];
+        for (let task of tasks) {
+          if (task.id !== id) {
+            newTasks.push(task);
+          }
+        }
+        setTasks(newTasks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
 
