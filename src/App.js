@@ -33,9 +33,10 @@ const App = () => {
       });
   }, []);
 
-  const updateTaskData = updatedTask => {     
+  const updateTaskData = updatedTask => {
+    const completeStatus = updatedTask.is_complete ? 'mark_complete' : 'mark_incomplete';     
       axios
-        .patch(`${API}/${updatedTask.id}/mark_complete`)
+        .patch(`${API}/${updatedTask.id}/${completeStatus}`)
         .then((result) => {
           console.log(result.data);
           const newTasks = tasks.map(task => {

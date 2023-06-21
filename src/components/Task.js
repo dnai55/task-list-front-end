@@ -11,7 +11,7 @@ const Task = (props) => {
     const updatedTask = {
       id: props.id,
       title: props.title,
-      isComplete: !props.isComplete
+      "is_complete": !props.isComplete
     };
     props.update(updatedTask);
 
