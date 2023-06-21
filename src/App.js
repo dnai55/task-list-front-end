@@ -1,27 +1,48 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
+import axios from 'axios';
 
-const TASKS = [
-  {
-    id: 1,
-    title: 'Mow the lawn',
-    isComplete: false,
-  },
-  {
-    id: 2,
-    title: 'Cook Pasta',
-    isComplete: true,
-  },
-];
+// const TASKS = [
+//   {
+//     id: 1,
+//     title: 'Mow the lawn',
+//     isComplete: false,
+//   },
+//   {
+//     id: 2,
+//     title: 'Cook Pasta',
+//     isComplete: true,
+//   },
+// ];
 
 const App = () => {
 
-  const [tasks, setTasks] = useState(TASKS);
+  const [tasks, setTasks] = useState([]);
+  const API = 'https://task-list-api-c17.onrender.com/';
+
+  useEffect(() => {
+    axios
+      .get(API)
+      .then((result) => {
+        setTasks(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const updateTaskData = updatedTask => {
-    const newTasks = tasks.map(task => {
+    const newTasks = 
+      axios
+        .patch(`${API}/${task_id}/mark_incomplete`, {task: newTasks})
+        .then((result) => {
+          console.log(result.data);
+          const
+        })
+    
+    tasks.map(task => {
       if (task.id === updatedTask.id) {
         return updatedTask;
       } else {
