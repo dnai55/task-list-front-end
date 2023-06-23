@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect} from 'react';
 import TaskList from './components/TaskList.js';
+import NewTaskForm from './components/NewTaskForm.js';
 import './App.css';
 import axios from 'axios';
 
@@ -22,7 +23,7 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const API = 'https://task-list-api-c17.onrender.com/tasks';
 
-  useEffect(() => {
+  const getAllTasks = () => {
     axios
       .get(API)
       .then((result) => {
@@ -31,7 +32,23 @@ const App = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    getAllTasks();
   }, []);
+
+  const postTask = (newTaskData) => {
+    axios
+    .post(API, newTaskData)
+    .then((result) => {
+      console.log(result.data);
+      getAllTasks();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
 
   const updateTaskData = updatedTask => {
     const completeStatus = updatedTask.is_complete ? 'mark_complete' : 'mark_incomplete';     
@@ -81,6 +98,7 @@ const App = () => {
       </header>
       <main>
         <div>{<TaskList tasks={tasks} updateTaskData= {updateTaskData} deleteTask={deleteTask} />}</div>
+        <NewTaskForm postTask= {postTask} />
       </main>
     </div>
   );
